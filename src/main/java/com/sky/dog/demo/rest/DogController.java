@@ -1,6 +1,8 @@
 package com.sky.dog.demo.rest;
 
 import com.sky.dog.demo.domain.Dog;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.function.DoubleFunction;
 @RestController
 public class DogController {
 
-    private List<Dog> dogs = new ArrayList<>();
+    private final List<Dog> dogs = new ArrayList<>();
 
     @GetMapping("/hello") // 'maps' this method to a GET request at /hello
     public String hello() {
@@ -23,14 +25,19 @@ public class DogController {
     }
 
     @PostMapping("/create")
-    public Dog createDog(@RequestBody Dog d) {
+    public ResponseEntity<Dog> createDog(@RequestBody Dog d) {
         dogs.add(d);
-        return this.dogs.get(this.dogs.size() - 1);
+        return new ResponseEntity<>(this.dogs.get(this.dogs.size() - 1), HttpStatus.CREATED);
     }
 
     @GetMapping("/get/{id}")
-    public Dog getDog(@PathVariable int id) {
-        return dogs.get(id);
+    public ResponseEntity<Dog> getDog(@PathVariable int id) {
+
+        if (id >= 0 && id < dogs.size()) {
+            return new ResponseEntity<>(dogs.get(id), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/getall")
@@ -39,13 +46,16 @@ public class DogController {
     }
 
     @PatchMapping("/update")
-    public Dog updateDog(
+    public ResponseEntity<Dog> updateDog(
             @RequestParam(name = "id") int id,
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "age", required = false) Integer age,
             @RequestParam(name = "colour", required = false) String colour,
             @RequestParam(name = "breed", required = false) String breed
     ){
+        if (id < 0 || id >= dogs.size()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         if (name != null) {
             dogs.get(id).setName(name);
         }
@@ -58,16 +68,16 @@ public class DogController {
         if (breed != null) {
             dogs.get(id).setBreed(breed);
         }
-        return dogs.get(id);
+        return new ResponseEntity<>(dogs.get(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/remove/{id}")
-    public String removeDog(@PathVariable int id){
+    public ResponseEntity<Dog> removeDog(@PathVariable int id){
         if (id >= 0 && id < dogs.size()) {
             dogs.remove(id);
-            return "Removed dog with id " + id;
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         else
-            return "Dog with id " + id + " does not exist";
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

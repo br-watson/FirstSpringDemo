@@ -1,18 +1,24 @@
 package com.sky.dog.demo.rest;
 
 import com.sky.dog.demo.domain.Dog;
+import com.sky.dog.demo.services.DogService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.DoubleFunction;
 
 @RestController
 public class DogController {
+    //@Autowired == also valid but less intuitive than a constructor
+    private final DogService service;
 
-    private final List<Dog> dogs = new ArrayList<>();
+    //Spring automatically injects this when it boots
+    public DogController(DogService service) {  //can use @Autowired but as it is the only constructor you don't need it
+        this.service = service;
+    }
 
     @GetMapping("/hello") // 'maps' this method to a GET request at /hello
     public String hello() {
@@ -26,15 +32,14 @@ public class DogController {
 
     @PostMapping("/create")
     public ResponseEntity<Dog> createDog(@RequestBody Dog d) {
-        dogs.add(d);
-        return new ResponseEntity<>(this.dogs.get(this.dogs.size() - 1), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.service.createDog(d), HttpStatus.CREATED);
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Dog> getDog(@PathVariable int id) {
-
-        if (id >= 0 && id < dogs.size()) {
-            return new ResponseEntity<>(dogs.get(id), HttpStatus.OK);
+        Dog found = this.service.getDog(id);
+        if (found != null) {
+            return new ResponseEntity<>(found, HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -42,7 +47,7 @@ public class DogController {
 
     @GetMapping("/getall")
     public List<Dog> getAllDogs() {
-        return dogs;
+        return this.service.getAllDogs();
     }
 
     @PatchMapping("/update")
@@ -53,30 +58,18 @@ public class DogController {
             @RequestParam(name = "colour", required = false) String colour,
             @RequestParam(name = "breed", required = false) String breed
     ){
-        if (id < 0 || id >= dogs.size()) {
+        Dog updated = this.service.updateDog(id, name, age, colour, breed);
+        if (updated == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        if (name != null) {
-            dogs.get(id).setName(name);
-        }
-        if (age != null) {
-            dogs.get(id).setAge(age);
-        }
-        if (colour != null) {
-            dogs.get(id).setColor(colour);
-        }
-        if (breed != null) {
-            dogs.get(id).setBreed(breed);
-        }
-        return new ResponseEntity<>(dogs.get(id), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @DeleteMapping("/remove/{id}")
-    public ResponseEntity<Dog> removeDog(@PathVariable int id){
-        if (id >= 0 && id < dogs.size()) {
-            dogs.remove(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+    public ResponseEntity<String> removeDog(@PathVariable int id){
+        String output = this.service.removeDog(id);
+        if (output.contains("removed"))
+            return new ResponseEntity<>(output, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

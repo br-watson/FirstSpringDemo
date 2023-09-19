@@ -1,12 +1,14 @@
 package com.sky.dog.demo.services;
 
 import com.sky.dog.demo.domain.Dog;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+//@Primary
 public class DogServiceList implements DogService {
 
     private final List<Dog> dogs = new ArrayList<>();
@@ -41,7 +43,7 @@ public class DogServiceList implements DogService {
         if (age != null)
             toUpdate.setAge(age);
         if (colour != null)
-            toUpdate.setColor(colour);
+            toUpdate.setColour(colour);
         if (breed != null)
             toUpdate.setBreed(breed);
         return toUpdate;
@@ -55,5 +57,10 @@ public class DogServiceList implements DogService {
         }
         else
             return "Dog with id " + id + " not found.";
+    }
+
+    @Override
+    public Dog getDogByName(String name) {
+        return null;
     }
 }

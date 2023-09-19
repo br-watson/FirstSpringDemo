@@ -1,6 +1,13 @@
 package com.sky.dog.demo.domain;
 
+import javax.persistence.*;
+
+@Entity //tells Spring that this class is linked to a table
 public class Dog {
+    @Id //marks field as primary key (unique identifier)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //sets the field to auto increment (id starts at 1, goes up by 1 each time)
+    private Integer id;
+
     private String name;
     private int age;
     private String colour;
@@ -16,6 +23,14 @@ public class Dog {
 
     public Dog() {
         super();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -34,11 +49,11 @@ public class Dog {
         this.age = age;
     }
 
-    public String getColor() {
+    public String getColour() {
         return colour;
     }
 
-    public void setColor(String colour) {
+    public void setColour(String colour) {
         this.colour = colour;
     }
 

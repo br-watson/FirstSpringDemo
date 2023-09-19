@@ -15,4 +15,6 @@ public interface DogService {
 
     String removeDog(int id);
 
+    Dog getDogByName(String name);
+
 }

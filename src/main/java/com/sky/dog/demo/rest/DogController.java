@@ -71,6 +71,15 @@ public class DogController {
         if (output.contains("removed"))
             return new ResponseEntity<>(output, HttpStatus.OK);
         else
+            return new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/get/name/{name}")
+    public ResponseEntity<Dog> getDogByName(@PathVariable String name){
+        Dog found = this.service.getDogByName(name);
+        if (found != null)
+            return new ResponseEntity<>(found, HttpStatus.OK);
+        else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

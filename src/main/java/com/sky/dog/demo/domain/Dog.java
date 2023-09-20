@@ -21,6 +21,15 @@ public class Dog {
         this.breed = breed;
     }
 
+    public Dog(Integer id, String name, int age, String colour, String breed) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.colour = colour;
+        this.breed = breed;
+    }
+
     public Dog() {
         super();
     }
@@ -63,5 +72,16 @@ public class Dog {
 
     public void setBreed(String breed) {
         this.breed = breed;
+    }
+
+    @Override
+    public String toString() {
+        return "Dog{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", colour='" + colour + '\'' +
+                ", breed='" + breed + '\'' +
+                '}';
     }
 }

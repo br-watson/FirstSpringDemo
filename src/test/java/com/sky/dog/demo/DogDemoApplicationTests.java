@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class DogDemoApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void contextLoads() { // context -> where the beans go
 	}
 
 }

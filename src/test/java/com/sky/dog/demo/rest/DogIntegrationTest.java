@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcResultMatchersDsl;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc //tells spring to set up a MockMvc object
 @Sql(scripts = {"classpath:dog-schema.sql", "classpath:dog-data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@ActiveProfiles("test")
 public class DogIntegrationTest {
 
     @Autowired //tells spring to put the mockmvc bean into this class
@@ -109,10 +111,10 @@ public class DogIntegrationTest {
 
     @Test
     void testUpdate() throws Exception {
-        mvc.perform(patch("/update?id=3&age=100"))
+        mvc.perform(patch("/update?id=3&name=Barry&age=80"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(this.mapper.writeValueAsString(
-                        new Dog(3, "Millie", 100, "black", "pit bull")
+                        new Dog(3, "Barry", 80, "black", "pit bull")
                 )));
     }
 }

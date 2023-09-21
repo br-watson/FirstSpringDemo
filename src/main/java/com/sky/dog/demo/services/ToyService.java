@@ -1,9 +1,11 @@
 package com.sky.dog.demo.services;
 
 import com.sky.dog.demo.domain.Toy;
+import com.sky.dog.demo.dtos.ToyDTO;
 import com.sky.dog.demo.repo.ToyRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +21,10 @@ public class ToyService {
         return this.repo.save(toy);
     }
 
-    public List<Toy> getToys() {
-        return this.repo.findAll();
+    public List<ToyDTO> getToys() {
+        List<ToyDTO> dtos = new ArrayList<>();
+        for (Toy t : this.repo.findAll())
+            dtos.add(new ToyDTO(t));
+        return dtos;
     }
 }

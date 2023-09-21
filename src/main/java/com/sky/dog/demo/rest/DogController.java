@@ -1,6 +1,7 @@
 package com.sky.dog.demo.rest;
 
 import com.sky.dog.demo.domain.Dog;
+import com.sky.dog.demo.dtos.DogDTO;
 import com.sky.dog.demo.services.DogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,8 @@ public class DogController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Dog> getDog(@PathVariable int id) {
-        Dog found = this.service.getDog(id);
+    public ResponseEntity<DogDTO> getDog(@PathVariable int id) {
+        DogDTO found = this.service.getDog(id);
         if (found != null) {
             return new ResponseEntity<>(found, HttpStatus.OK);
         }
@@ -46,19 +47,19 @@ public class DogController {
     }
 
     @GetMapping("/getall")
-    public List<Dog> getAllDogs() {
+    public List<DogDTO> getAllDogs() {
         return this.service.getAllDogs();
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<Dog> updateDog(
+    public ResponseEntity<DogDTO> updateDog(
             @RequestParam(name = "id") int id,
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "age", required = false) Integer age,
             @RequestParam(name = "colour", required = false) String colour,
             @RequestParam(name = "breed", required = false) String breed
     ){
-        Dog updated = this.service.updateDog(id, name, age, colour, breed);
+        DogDTO updated = this.service.updateDog(id, name, age, colour, breed);
         if (updated == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else
@@ -75,8 +76,8 @@ public class DogController {
     }
 
     @GetMapping("/get/name/{name}")
-    public ResponseEntity<Dog> getDogByName(@PathVariable String name){
-        Dog found = this.service.getDogByName(name);
+    public ResponseEntity<DogDTO> getDogByName(@PathVariable String name){
+        DogDTO found = this.service.getDogByName(name);
         if (found != null)
             return new ResponseEntity<>(found, HttpStatus.OK);
         else

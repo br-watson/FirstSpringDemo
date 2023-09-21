@@ -2,6 +2,7 @@ package com.sky.dog.demo.rest;
 
 
 import com.sky.dog.demo.domain.Toy;
+import com.sky.dog.demo.dtos.ToyDTO;
 import com.sky.dog.demo.services.ToyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class ToyController {
     }
 
     @GetMapping("/getall")
-    public List<Toy> getAllToys() {
+    public List<ToyDTO> getAllToys() {
         return this.service.getToys();
     }
 }

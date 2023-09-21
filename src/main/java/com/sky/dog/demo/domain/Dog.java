@@ -1,6 +1,7 @@
 package com.sky.dog.demo.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity //tells Spring that this class is linked to a table
 public class Dog {
@@ -12,6 +13,9 @@ public class Dog {
     private int age;
     private String colour;
     private String breed;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Toy> toys;
 
     public Dog(String name, int age, String colour, String breed) {
         super();
@@ -28,6 +32,14 @@ public class Dog {
         this.age = age;
         this.colour = colour;
         this.breed = breed;
+    }
+
+    public List<Toy> getToys() {
+        return toys;
+    }
+
+    public void setToys(List<Toy> toys) {
+        this.toys = toys;
     }
 
     public Dog() {

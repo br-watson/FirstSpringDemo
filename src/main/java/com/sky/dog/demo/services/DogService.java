@@ -1,5 +1,6 @@
 package com.sky.dog.demo.services;
 import com.sky.dog.demo.domain.Dog;
+import com.sky.dog.demo.dtos.DogDTO;
 
 import java.util.List;
 
@@ -7,14 +8,14 @@ public interface DogService {
 
     Dog createDog(Dog dog);
 
-    Dog getDog(int id);
+    DogDTO getDog(int id);
 
-    List<Dog> getAllDogs();
+    List<DogDTO> getAllDogs();
 
-    Dog updateDog(int id, String name, Integer age, String colour, String breed);
+    DogDTO updateDog(int id, String name, Integer age, String colour, String breed);
 
     String removeDog(int id);
 
-    Dog getDogByName(String name);
+    DogDTO getDogByName(String name);
 
 }

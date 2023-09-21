@@ -1,10 +1,12 @@
 package com.sky.dog.demo.services;
 
 import com.sky.dog.demo.domain.Dog;
+import com.sky.dog.demo.dtos.DogDTO;
 import com.sky.dog.demo.repo.DogRepo;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,25 +25,32 @@ public class DogServiceDB implements DogService {
     }
 
     @Override
-    public Dog getDog(int id) {
+    public DogDTO getDog(int id) {
         //might be a person or not
 //        Optional<Dog> found = this.repo.findById(id);
 //        return found.get();
 
-        return this.repo.findById(id).orElse(null);
+        Dog d = this.repo.findById(id).orElse(null);
+        if (d != null)
+            return new DogDTO(d);
+        else
+            return null;
     }
 
     @Override
-    public List<Dog> getAllDogs() {
-        return this.repo.findAll();
+    public List<DogDTO> getAllDogs() {
+        List<DogDTO> dtos = new ArrayList<>();
+        for (Dog d : this.repo.findAll())
+            dtos.add(new DogDTO(d));
+        return dtos;
     }
 
     @Override
-    public Dog updateDog(int id, String name, Integer age, String colour, String breed) {
+    public DogDTO updateDog(int id, String name, Integer age, String colour, String breed) {
         if (!this.repo.existsById(id)) {
             return null;
         }
-        Dog toUpdate = this.getDog(id);
+        Dog toUpdate = this.repo.findById(id).get();
         if (name != null)
             toUpdate.setName(name);
         if (age != null)
@@ -51,7 +60,8 @@ public class DogServiceDB implements DogService {
         if (breed != null)
             toUpdate.setBreed(breed);
 
-        return this.repo.save(toUpdate);
+        this.repo.save(toUpdate);
+        return new DogDTO(toUpdate);
     }
 
     @Override
@@ -65,7 +75,11 @@ public class DogServiceDB implements DogService {
     }
 
     @Override
-    public Dog getDogByName(String name) {
-        return this.repo.findByNameIgnoreCase(name);
+    public DogDTO getDogByName(String name) {
+        Dog d = this.repo.findByNameIgnoreCase(name);
+        if (d != null)
+            return new DogDTO(d);
+        else
+            return null;
     }
 }

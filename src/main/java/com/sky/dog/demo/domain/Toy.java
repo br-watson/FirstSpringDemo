@@ -2,6 +2,7 @@ package com.sky.dog.demo.domain;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Toy {
@@ -18,6 +19,19 @@ public class Toy {
 
     public Toy() {
         super();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Toy toy = (Toy) o;
+        return Objects.equals(id, toy.id) && Objects.equals(shape, toy.shape) && Objects.equals(colour, toy.colour) && Objects.equals(owner, toy.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, shape, colour, owner);
     }
 
     public Integer getId() {

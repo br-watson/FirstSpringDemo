@@ -2,6 +2,7 @@ package com.sky.dog.demo.domain;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity //tells Spring that this class is linked to a table
 public class Dog {
@@ -34,16 +35,29 @@ public class Dog {
         this.breed = breed;
     }
 
+    public Dog() {
+        super();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dog dog = (Dog) o;
+        return age == dog.age && Objects.equals(id, dog.id) && Objects.equals(name, dog.name) && Objects.equals(colour, dog.colour) && Objects.equals(breed, dog.breed) && Objects.equals(toys, dog.toys);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, age, colour, breed, toys);
+    }
+
     public List<Toy> getToys() {
         return toys;
     }
 
     public void setToys(List<Toy> toys) {
         this.toys = toys;
-    }
-
-    public Dog() {
-        super();
     }
 
     public Integer getId() {
